@@ -514,13 +514,13 @@ class Paths
 		if(spriteJson != null)
 		{
 			changedAtlasJson = true;
-			spriteJson = File.getContent(spriteJson);
+			spriteJson = getTextFromFile(Std.string(spriteJson));
 		}
 
 		if(animationJson != null) 
 		{
 			changedAnimJson = true;
-			animationJson = File.getContent(animationJson);
+			animationJson = getTextFromFile(Std.string(animationJson));
 		}
 
 		// is folder or image path

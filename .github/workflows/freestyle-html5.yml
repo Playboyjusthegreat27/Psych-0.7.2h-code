@@ -1,0 +1,56 @@
+name: Freestyle HTML5 Port Build
+
+on:
+  push:
+    branches: [freestyle-port]
+  workflow_dispatch:
+
+jobs:
+  build-html5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout port branch
+        uses: actions/checkout@v4
+
+      - name: Set up Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.2
+
+      - name: Install Psych 0.7.2 compatible libraries
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp 4.3.2 --quiet
+          haxelib install lime 8.1.2 --quiet
+          haxelib install openfl 9.3.3 --quiet
+          haxelib install flixel 5.6.1 --quiet
+          haxelib install flixel-addons 3.2.2 --quiet
+          haxelib install flixel-ui 2.6.1 --quiet
+          haxelib install flixel-tools 1.5.1 --quiet
+          haxelib install tjson 1.4.0 --quiet
+          haxelib git flxanimate https://github.com/ShadowMario/flxanimate dev
+
+      - name: Patch FlxAnimate for HTML5
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path.home() / "haxelib/flxanimate/git/flxanimate/FlxAnimate.hx"
+          s = p.read_text()
+          old = "if(trimmed == '.json') myJson = sys.io.File.getContent(myJson); //is a path"
+          new = """#if sys
+          \t\t\tif(trimmed == '.json') myJson = sys.io.File.getContent(myJson); //is a path
+          \t\t\t#end"""
+          if old not in s:
+              raise SystemExit("Expected FlxAnimate source line was not found")
+          p.write_text(s.replace(old, new, 1))
+          PY
+
+      - name: Build HTML5 release
+        run: haxelib run lime build html5 -release
+
+      - name: Upload HTML5 build
+        uses: actions/upload-artifact@v4
+        with:
+          name: freestyle-psych-html5
+          path: export/release/html5/bin
+          if-no-files-found: error
