@@ -52,14 +52,13 @@ The standard stage assets and stage Lua/Haxe behavior need to be checked against
 - Port custom stages and gameplay behavior separately; copying image atlases alone is not enough.
 - Build and test one representative song first, then expand to all 18 songs.
 
-## Additional target inspection
+## Additional target inspection and build setup
 
-- Confirmed the target chart format uses the nested `song` object with section `sectionNotes` arrays, matching the broad Kade chart structure.
-- Confirmed Psych already includes definitions for `bf-pixel`, `gf-pixel`, and `senpai-angry`; these should be reused where their atlas prefixes and behavior match the source.
-- Confirmed the existing GitHub Actions workflow only builds Linux, Windows, and macOS. It does not currently produce an HTML5 artifact.
+- Restored access to the supplied `freestyle-html-main.zip` from the user's Library.
+- Rechecked all 54 chart files. They use the nested `song` object and 3-value note arrays expected by Psych's chart structure. Source charts also contain Kade-era metadata such as `typeOfSection`, `sectionLengths`, and `sections` that need deliberate handling.
+- Confirmed Psych already includes definitions for `bf-pixel`, `gf-pixel`, and `senpai-angry`. These are useful starting points, but the glitch variants still need source-specific verification.
+- Added `.github/workflows/freestyle-html5.yml` on this branch. It runs a dedicated HTML5 release build on pushes to `freestyle-port` and uploads the resulting browser build as a workflow artifact.
 
-## Current blocker and state
+## Current state
 
-The source ZIP used for the earlier inventory is not currently available in the active work session. The public source repository's current `main` tree contains the song audio but does not expose the 54 chart JSONs listed in the ZIP inventory. The archive must be reattached to safely convert and validate the charts and inspect source-specific character/stage definitions.
-
-No source project files have been overwritten. The port is not complete or build-tested yet.
+The archive is available again and chart conversion can proceed. The HTML5 workflow has been added but has not yet run, so there is no verified build artifact. Song charts, audio, character definitions, and stage behavior are not yet fully imported. No source project files have been overwritten.
