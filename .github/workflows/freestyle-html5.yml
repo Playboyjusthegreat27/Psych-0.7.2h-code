@@ -28,7 +28,7 @@ jobs:
           haxelib install flixel-ui 2.6.1 --quiet
           haxelib install flixel-tools 1.5.1 --quiet
           haxelib install tjson 1.4.0 --quiet
-          haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate 768740a56b26aa0c072720e0d1236b94afe68e3e
+          haxelib git flxanimate https://github.com/ShadowMario/flxanimate dev
 
       - name: Build HTML5 release
         run: haxelib run lime build html5 -release
