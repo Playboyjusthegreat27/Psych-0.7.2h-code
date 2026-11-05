@@ -52,6 +52,14 @@ The standard stage assets and stage Lua/Haxe behavior need to be checked against
 - Port custom stages and gameplay behavior separately; copying image atlases alone is not enough.
 - Build and test one representative song first, then expand to all 18 songs.
 
-## Current state
+## Additional target inspection
 
-This branch is a safe working branch only. No source project files have been overwritten and no claim is made that the port is complete or build-tested yet.
+- Confirmed the target chart format uses the nested `song` object with section `sectionNotes` arrays, matching the broad Kade chart structure.
+- Confirmed Psych already includes definitions for `bf-pixel`, `gf-pixel`, and `senpai-angry`; these should be reused where their atlas prefixes and behavior match the source.
+- Confirmed the existing GitHub Actions workflow only builds Linux, Windows, and macOS. It does not currently produce an HTML5 artifact.
+
+## Current blocker and state
+
+The source ZIP used for the earlier inventory is not currently available in the active work session. The public source repository's current `main` tree contains the song audio but does not expose the 54 chart JSONs listed in the ZIP inventory. The archive must be reattached to safely convert and validate the charts and inspect source-specific character/stage definitions.
+
+No source project files have been overwritten. The port is not complete or build-tested yet.
