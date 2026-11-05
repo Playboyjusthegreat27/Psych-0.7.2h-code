@@ -1,0 +1,34 @@
+name: Freestyle HTML5 Port Build
+
+on:
+  push:
+    branches: [freestyle-port]
+  workflow_dispatch:
+
+jobs:
+  build-html5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout port branch
+        uses: actions/checkout@v4
+
+      - name: Set up Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.2.5
+
+      - name: Set up Haxelib
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp --quiet
+          haxe -cp ./setup -D analyzer-optimize -main Main --interp
+
+      - name: Build HTML5 release
+        run: haxelib run lime build html5 -release
+
+      - name: Upload HTML5 build
+        uses: actions/upload-artifact@v4
+        with:
+          name: freestyle-psych-html5
+          path: export/release/html5/bin
+          if-no-files-found: error
